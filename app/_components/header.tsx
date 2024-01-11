@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import UserMenu from "./user-menu";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
+  const user = false;
   return (
     <nav className="flex justify-between items-center bg-white top-0 left-0 sticky shadow-md p-4">
       {/* Logo */}
@@ -29,13 +31,19 @@ const Header = () => {
         </Button>
       </div>
       {/* Profile and User Menu */}
-      <div className="flex items-center space-x-3">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <UserMenu />
-      </div>
+      {user ? (
+        <div className="flex items-center space-x-3">
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <UserMenu />
+        </div>
+      ) : (
+        <Link href="/login" className={buttonVariants()}>
+          Log In
+        </Link>
+      )}
     </nav>
   );
 };
