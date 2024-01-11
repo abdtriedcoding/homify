@@ -6,6 +6,7 @@ import UserMenu from "./user-menu";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import LoginModal from "./login-modal";
 
 const Header = () => {
   const user = false;
@@ -40,9 +41,10 @@ const Header = () => {
           <UserMenu />
         </div>
       ) : (
-        <Link href="/login" className={buttonVariants()}>
-          Log In
-        </Link>
+        // <Link href="/login" className={buttonVariants()}>
+        //   Log In
+        // </Link>
+        <LoginModal />
       )}
     </nav>
   );
