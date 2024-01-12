@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import LoginModal from "./login-modal";
 import getCurrentUser from "@/app/actions/getCurrentUser";
+import Categories from "@/app/_components/categories";
 
 const Header = async () => {
   const currentUser = await getCurrentUser();
   return (
+    <>
     <nav className="flex justify-between items-center bg-white top-0 left-0 sticky shadow-md p-4">
       {/* Logo */}
       <Link href={"/"}>
@@ -45,6 +47,8 @@ const Header = async () => {
         <LoginModal />
       )}
     </nav>
+    <Categories />
+    </>
   );
 };
 
