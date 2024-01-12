@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/popover";
 import { CheckIcon } from "lucide-react";
 import { BsCaretDown } from "react-icons/bs";
+import { categories } from "@/constants";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -41,10 +42,14 @@ const formSchema = z.object({
   countries: z.string({
     required_error: "Please select a country.",
   }),
+  category: z.string({
+    required_error: "Please select a category.",
+  }),
 });
 
 const Page = () => {
   const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
   const { getAll } = useCountries();
   const countries = getAll();
 
@@ -53,7 +58,6 @@ const Page = () => {
     defaultValues: {
       title: "",
       description: "",
-      countries: ""
     },
   });
 
@@ -145,6 +149,68 @@ const Page = () => {
                               className={cn(
                                 "ml-auto h-4 w-4",
                                 countries.label === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Category</FormLabel>
+                <Popover open={open2} onOpenChange={setOpen2}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? categories.find(
+                              (category) => category.value === field.value
+                            )?.label
+                          : "Select Category"}
+                        <BsCaretDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[450px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search Category"
+                        className="h-9"
+                      />
+                      <CommandEmpty>No category found.</CommandEmpty>
+                      <CommandGroup className="h-[120px] overflow-y-auto">
+                        {categories.map((category) => (
+                          <CommandItem
+                            value={category.label}
+                            key={category.value}
+                            onSelect={() => {
+                              form.setValue("category", category.value);
+                              setOpen2(false);
+                            }}
+                          >
+                            {category.label}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                category.value === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
