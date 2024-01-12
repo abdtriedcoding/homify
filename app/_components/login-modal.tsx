@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -5,6 +7,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { signIn } from 'next-auth/react';
 
 const LoginModal = () => {
   return (
@@ -18,7 +21,7 @@ const LoginModal = () => {
             <Button size={"lg"}>Login With Google</Button>
           </DrawerClose>
           <DrawerClose asChild>
-            <Button size={"lg"}>Login With Github</Button>
+            <Button onClick={()=>signIn('github')} size={"lg"}>Login With Github</Button>
           </DrawerClose>
         </div>
       </DrawerContent>
