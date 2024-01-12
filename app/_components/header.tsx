@@ -34,15 +34,14 @@ const Header = async () => {
       {currentUser ? (
         <div className="flex items-center space-x-3">
           <Avatar>
-            <AvatarImage src={currentUser.image ?? "https://github.com/shadcn.png"} />
+            <AvatarImage
+              src={currentUser.image ?? "https://github.com/shadcn.png"}
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <UserMenu />
         </div>
       ) : (
-        // <Link href="/login" className={buttonVariants()}>
-        //   Log In
-        // </Link>
         <LoginModal />
       )}
     </nav>
