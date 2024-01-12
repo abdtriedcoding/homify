@@ -1,15 +1,14 @@
 import { SearchIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import UserMenu from "./user-menu";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import LoginModal from "./login-modal";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 
-const Header = () => {
-  const user = false;
+const Header = async () => {
+  const currentUser = await getCurrentUser();
   return (
     <nav className="flex justify-between items-center bg-white top-0 left-0 sticky shadow-md p-4">
       {/* Logo */}
@@ -32,10 +31,10 @@ const Header = () => {
         </Button>
       </div>
       {/* Profile and User Menu */}
-      {user ? (
+      {currentUser ? (
         <div className="flex items-center space-x-3">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={currentUser.image ?? "https://github.com/shadcn.png"} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <UserMenu />
