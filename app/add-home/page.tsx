@@ -2,9 +2,6 @@
 
 import * as React from "react";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,9 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import useCountries from "@/hook/useCountries";
-import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -28,36 +22,38 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CheckIcon } from "lucide-react";
-import { BsCaretDown } from "react-icons/bs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { categories } from "@/constants";
-
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title cant be blank",
-  }),
-  description: z.string().min(2, {
-    message: "Description cant be blank",
-  }),
-  countries: z.string({
-    required_error: "Please select a country.",
-  }),
-  category: z.string({
-    required_error: "Please select a category.",
-  }),
-});
+import { Label } from "@/components/ui/label";
+import { CheckIcon, ChevronDown } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import useCountries from "@/hook/useCountries";
+import formSchema from "@/validation";
 
 const Page = () => {
-  const [open, setOpen] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
   const { getAll } = useCountries();
   const countries = getAll();
+
+  const [open, setOpen] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
+      price: 0,
     },
   });
 
@@ -72,7 +68,7 @@ const Page = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8  max-w-4xl mx-auto"
+        className="space-y-8 max-w-4xl mx-auto"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
@@ -88,22 +84,24 @@ const Page = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="description"
+            name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Price/night</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Description" {...field} />
+                  <Input type="number" placeholder="Enter Price" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="countries"
+            name="location"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Location</FormLabel>
@@ -123,7 +121,7 @@ const Page = () => {
                               (countries) => countries.label === field.value
                             )?.label
                           : "Select countries"}
-                        <BsCaretDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -140,7 +138,7 @@ const Page = () => {
                             value={countries.label}
                             key={countries.label}
                             onSelect={() => {
-                              form.setValue("countries", countries.label);
+                              form.setValue("location", countries.label);
                               setOpen(false);
                             }}
                           >
@@ -163,6 +161,7 @@ const Page = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="category"
@@ -185,7 +184,7 @@ const Page = () => {
                               (category) => category.value === field.value
                             )?.label
                           : "Select Category"}
-                        <BsCaretDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronDown className="ml-2 h-4 w-4 shrink-0" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -225,8 +224,118 @@ const Page = () => {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="no_of_guest"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of Guest</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select the guest number" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
+                    <SelectItem value="5 or More">5 or More</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="no_of_rooms"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of Rooms</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select the guest number" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
+                    <SelectItem value="5 or More">5 or More</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="no_of_bathroom"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of Bathroom</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select the number of bathroom" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3</SelectItem>
+                    <SelectItem value="4">4</SelectItem>
+                    <SelectItem value="5 or More">5 or More</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="space-y-2">
+            <Label htmlFor="picture">Picture</Label>
+            <Input type="file" />
+          </div>
         </div>
-        <Button type="submit">Submit</Button>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Tell about your place"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button className="w-full" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
