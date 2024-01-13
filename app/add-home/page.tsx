@@ -40,13 +40,17 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import useCountries from "@/hook/useCountries";
 import formSchema from "@/validation";
+import { useEdgeStore } from "@/lib/edgestore";
+import { handelAddHome } from "@/app/actions/handelAddHome";
 
 const Page = () => {
+  const { edgestore } = useEdgeStore();
   const { getAll } = useCountries();
   const countries = getAll();
 
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [files, setFiles] = React.useState<File[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,12 +61,27 @@ const Page = () => {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const handleImageUpload = async () => {
+    try {
+      const urls: string[] = [];
+
+      for (const singleFile of files) {
+        const res = await edgestore.publicFiles.upload({
+          file: singleFile,
+        });
+        urls.push(res.url);
+      }
+      return urls;
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const imageUrls = await handleImageUpload();
+    await handelAddHome(values, imageUrls!);
+    form.reset();
+  };
 
   return (
     <Form {...form}>
@@ -319,7 +338,11 @@ const Page = () => {
 
           <div className="space-y-2">
             <Label htmlFor="picture">Picture</Label>
-            <Input type="file" />
+            <Input
+              multiple
+              onChange={(e) => setFiles(Array.from(e.target.files || []))}
+              type="file"
+            />
           </div>
         </div>
 
