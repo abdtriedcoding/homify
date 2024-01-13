@@ -92,7 +92,13 @@ const Page = () => {
               <FormItem>
                 <FormLabel>Price/night</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Enter Price" {...field} />
+                  <Input
+                    type="number"
+                    {...field}
+                    {...form.control.register("price", {
+                      valueAsNumber: true,
+                    })}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,6 +145,7 @@ const Page = () => {
                             key={countries.label}
                             onSelect={() => {
                               form.setValue("location", countries.label);
+                              form.clearErrors("location");
                               setOpen(false);
                             }}
                           >
@@ -202,6 +209,7 @@ const Page = () => {
                             key={category.value}
                             onSelect={() => {
                               form.setValue("category", category.value);
+                              form.clearErrors("category");
                               setOpen2(false);
                             }}
                           >
