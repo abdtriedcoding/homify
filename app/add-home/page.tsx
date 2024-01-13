@@ -42,6 +42,7 @@ import useCountries from "@/hook/useCountries";
 import formSchema from "@/validation";
 import { useEdgeStore } from "@/lib/edgestore";
 import { handelAddHome } from "@/app/actions/handelAddHome";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const { edgestore } = useEdgeStore();
@@ -78,8 +79,13 @@ const Page = () => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const imageUrls = await handleImageUpload();
-    await handelAddHome(values, imageUrls!);
+    if (files.length === 0) {
+      toast.error("Upload at least one image");
+      return;
+    }
+    const imageUrls: string[] = (await handleImageUpload()) || [];
+    await handelAddHome(values, imageUrls);
+    toast.success("Your home is added successfully");
     form.reset();
   };
 

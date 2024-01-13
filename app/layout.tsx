@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/app/_components/header";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <Toaster />
         <Header />
         <main className="p-4">
           <EdgeStoreProvider>{children}</EdgeStoreProvider>
