@@ -21,7 +21,7 @@ export async function handelAddHome(values: Inputs, imageUrls: string[]) {
       guestCount: result.guestCount,
       location: result.location,
       price: result.price,
-      userId: currentUser.uid,
+      userId: currentUser.id,
     },
   });
 }
