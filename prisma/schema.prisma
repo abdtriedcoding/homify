@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  uid           String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   email         String    @unique
   emailVerified DateTime?
@@ -39,7 +39,7 @@ model Account {
   id_token          String? @db.String
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [uid], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -48,17 +48,17 @@ model Listing {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
-  imageSrc      String[]
+  imageUrls     String[]
   createdAt     DateTime @default(now())
   category      String
   roomCount     String
   bathroomCount String
   guestCount    String
-  locationValue String
+  location      String
   userId        String   @db.ObjectId
   price         Int
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [uid], onDelete: Cascade)
   reservations Reservation[]
 }
 
@@ -71,6 +71,6 @@ model Reservation {
   totalPrice Int
   createdAt  DateTime @default(now())
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [uid], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }

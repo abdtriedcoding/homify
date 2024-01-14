@@ -43,9 +43,13 @@ import formSchema from "@/validation";
 import { useEdgeStore } from "@/lib/edgestore";
 import { handelAddHome } from "@/app/actions/handelAddHome";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { edgestore } = useEdgeStore();
+  const router = useRouter();
+  const { formState } = useForm();
+  const { isSubmitting } = formState;
   const { getAll } = useCountries();
   const countries = getAll();
 
@@ -84,8 +88,13 @@ const Page = () => {
       return;
     }
     const imageUrls: string[] = (await handleImageUpload()) || [];
+    if (imageUrls.length === 0) {
+      toast.error("Failed to upload images. Please try again.");
+      return;
+    }
     await handelAddHome(values, imageUrls);
     toast.success("Your home is added successfully");
+    router.push("/");
     form.reset();
   };
 
@@ -260,7 +269,7 @@ const Page = () => {
 
           <FormField
             control={form.control}
-            name="no_of_guest"
+            name="guestCount"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Number of Guest</FormLabel>
@@ -288,7 +297,7 @@ const Page = () => {
 
           <FormField
             control={form.control}
-            name="no_of_rooms"
+            name="roomCount"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Number of Rooms</FormLabel>
@@ -316,7 +325,7 @@ const Page = () => {
 
           <FormField
             control={form.control}
-            name="no_of_bathroom"
+            name="bathroomCount"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Number of Bathroom</FormLabel>
@@ -370,7 +379,11 @@ const Page = () => {
           )}
         />
 
-        <Button className="w-full" type="submit">
+        <Button
+          className="w-full"
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
           Submit
         </Button>
       </form>

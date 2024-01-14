@@ -13,16 +13,17 @@ const formSchema = z.object({
   category: z.string({
     required_error: "Please select a category",
   }),
-  no_of_guest: z.string({
+  guestCount: z.string({
     required_error: "Please select number of guests",
   }),
-  no_of_rooms: z.string({
+  roomCount: z.string({
     required_error: "Please select number of rooms",
   }),
-  no_of_bathroom: z.string({
+  bathroomCount: z.string({
     required_error: "Please select number of bathrooms",
   }),
-  price: z.number({
+  price: z
+    .number({
       required_error: "Number is required",
       invalid_type_error: "Number must be a number",
     })
