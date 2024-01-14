@@ -2,12 +2,14 @@ import Link from "next/link";
 import ImageSlider from "./image-slider";
 
 const ListingCard = ({
+  id,
   title,
   description,
   roomCount,
   price,
   imageUrls,
 }: {
+  id: string;
   title: string;
   description: string;
   roomCount: string;
@@ -16,7 +18,7 @@ const ListingCard = ({
 }) => {
   return (
     <>
-      <Link href={"/"}>
+      <Link href={`/property/${id}`}>
         <ImageSlider urls={imageUrls} />
         <div className="mt-4 flex flex-col justify-between space-y-1">
           <h3 className="font-medium truncate">{title}</h3>
