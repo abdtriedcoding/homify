@@ -5,7 +5,7 @@ import { categories } from "@/constants";
 
 const Categories = () => {
   return (
-    <div className="p-4 flex flex-row items-center justify-between overflow-x-auto scrollbar-hide">
+    <div className="p-4 space-x-3 flex flex-row items-center justify-between overflow-x-auto scrollbar-hide">
       {categories.map((item) => (
         <CategoryBox key={item.label} label={item.label} icon={item.icon} />
       ))}

@@ -5,7 +5,7 @@ export default async function Home() {
   const listings = await getListings();
   return (
     <>
-      <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {listings?.map((data, index) => (
           <ListingCard key={index} {...data} />
         ))}
