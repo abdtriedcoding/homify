@@ -27,7 +27,9 @@ const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>My Trips</DropdownMenuItem>
-          <DropdownMenuItem>My Favorites</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/favorites")}>
+            My Favorites
+          </DropdownMenuItem>
           <DropdownMenuItem>My Reservations</DropdownMenuItem>
           <DropdownMenuItem>My Properties</DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push("/add-home")}>
