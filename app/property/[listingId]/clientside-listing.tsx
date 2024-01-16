@@ -7,7 +7,11 @@ import { HeartIcon } from "lucide-react";
 import ClientSideMap from "./_components/clientside-map";
 import { ListingClientProps } from "@/types";
 
-const ListingClient = ({ listing, currentUser }: ListingClientProps) => {
+const ListingClient = ({
+  listing,
+  currentUser,
+  reservations,
+}: ListingClientProps) => {
   return (
     <>
       <div className="max-w-5xl mx-auto">

@@ -1,4 +1,4 @@
-import { Listing, User } from "@prisma/client";
+import { Listing, Reservation, User } from "@prisma/client";
 import { IconType } from "react-icons/lib";
 
 export interface CategoryBoxProps {
@@ -32,4 +32,14 @@ export type SafeUser = Omit<
 export interface ListingClientProps {
   listing: SafeListing;
   currentUser?: SafeUser | null;
+  reservations:SafeReservation[]
 }
+
+export type SafeReservation = Omit<
+  Reservation,
+  "createdAt" | "startDate" | "endDate"
+> & {
+  createdAt: string;
+  startDate: string;
+  endDate: string;
+};
