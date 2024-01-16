@@ -9,6 +9,7 @@ import { ListingClientProps } from "@/types";
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
 import ListingReservation from "./_components/listing-reservation";
 import ReserveButton from "./_components/reserve-button";
+import { Range } from "react-date-range";
 
 const initialDateRange = {
   startDate: new Date(),
@@ -24,7 +25,7 @@ const ListingClient = ({
   const disabledDates = useMemo(() => {
     let dates: Date[] = [];
 
-    reservations.forEach((reservation: any) => {
+    reservations.forEach((reservation) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
         end: new Date(reservation.endDate),
@@ -37,7 +38,7 @@ const ListingClient = ({
   }, [reservations]);
 
   const [totalPrice, setTotalPrice] = useState(listing.price);
-  const [dateRange, setDateRange] = useState(initialDateRange);
+  const [dateRange, setDateRange] = useState<Range>(initialDateRange);
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
@@ -102,15 +103,13 @@ const ListingClient = ({
           </div>
           {/* Calendar */}
           <div className="lg:col-span-1">
-
             <ListingReservation
               price={listing.price}
               totalPrice={totalPrice}
-              onChangeDate={(value: any) => setDateRange(value)}
+              onChangeDate={(value) => setDateRange(value)}
               dateRange={dateRange}
               disabledDates={disabledDates}
             />
-
             <ReserveButton />
           </div>
         </div>
