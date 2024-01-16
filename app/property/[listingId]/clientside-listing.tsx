@@ -1,17 +1,59 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ListingImageSlider from "./_components/listing-image-slider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HeartIcon } from "lucide-react";
 import ClientSideMap from "./_components/clientside-map";
 import { ListingClientProps } from "@/types";
+import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
+import ListingReservation from "./_components/listing-reservation";
+import ReserveButton from "./_components/reserve-button";
+
+const initialDateRange = {
+  startDate: new Date(),
+  endDate: new Date(),
+  key: "selection",
+};
 
 const ListingClient = ({
   listing,
   currentUser,
   reservations,
 }: ListingClientProps) => {
+  const disabledDates = useMemo(() => {
+    let dates: Date[] = [];
+
+    reservations.forEach((reservation: any) => {
+      const range = eachDayOfInterval({
+        start: new Date(reservation.startDate),
+        end: new Date(reservation.endDate),
+      });
+
+      dates = [...dates, ...range];
+    });
+
+    return dates;
+  }, [reservations]);
+
+  const [totalPrice, setTotalPrice] = useState(listing.price);
+  const [dateRange, setDateRange] = useState(initialDateRange);
+
+  useEffect(() => {
+    if (dateRange.startDate && dateRange.endDate) {
+      const dayCount = differenceInCalendarDays(
+        dateRange.endDate,
+        dateRange.startDate
+      );
+
+      if (dayCount && listing.price) {
+        setTotalPrice(dayCount * listing.price);
+      } else {
+        setTotalPrice(listing.price);
+      }
+    }
+  }, [dateRange, listing.price]);
+
   return (
     <>
       <div className="max-w-5xl mx-auto">
@@ -60,17 +102,16 @@ const ListingClient = ({
           </div>
           {/* Calendar */}
           <div className="lg:col-span-1">
-            <p className="text-3xl tracking-tight text-gray-900">
-              ${listing.price}
-            </p>
-            <form className="mt-10">
-              <button
-                type="submit"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Add to bag
-              </button>
-            </form>
+
+            <ListingReservation
+              price={listing.price}
+              totalPrice={totalPrice}
+              onChangeDate={(value: any) => setDateRange(value)}
+              dateRange={dateRange}
+              disabledDates={disabledDates}
+            />
+
+            <ReserveButton />
           </div>
         </div>
       </div>
