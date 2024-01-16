@@ -12,7 +12,7 @@ const Header = async () => {
   const currentUser = await getCurrentUser();
   return (
     <>
-      <nav className="flex justify-between items-center bg-white top-0 left-0 sticky shadow-md p-4">
+      <nav className="flex justify-between items-center bg-white top-0 left-0 sticky shadow-md p-4 z-30">
         {/* Logo */}
         <Link href={"/"}>
           <Image

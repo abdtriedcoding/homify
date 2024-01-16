@@ -9,3 +9,8 @@ export interface ImageLoaderParams {
   width: number;
   quality?: number;
 }
+
+export interface CountryProps {
+  label: string;
+  value: string;
+}

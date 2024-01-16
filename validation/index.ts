@@ -7,7 +7,7 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: "Description must be at least 10 characters",
   }),
-  location: z.string({
+  country: z.string({
     required_error: "Please select a country",
   }),
   category: z.string({
