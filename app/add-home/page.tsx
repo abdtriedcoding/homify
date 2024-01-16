@@ -1,10 +1,7 @@
-import getAllCountries from "../actions/getCountries";
 import AddHomeForm from "./_components/form";
 
 const Page = async () => {
-  const countries = await getAllCountries();
-
-  return <AddHomeForm countries={countries!} />;
+  return <AddHomeForm />;
 };
 
 export default Page;

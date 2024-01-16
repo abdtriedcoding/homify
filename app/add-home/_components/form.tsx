@@ -1,11 +1,12 @@
 "use client";
 
+import * as z from "zod";
+import React from "react";
 import { handelAddHome } from "@/app/actions/handelAddHome";
 import { useEdgeStore } from "@/lib/edgestore";
 import formSchema from "@/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -42,12 +43,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import * as z from "zod";
-import { CountryProps } from "@/types";
+import useCountries from "@/hook/useCountries";
 
-const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
+const AddHomeForm = () => {
   const { edgestore } = useEdgeStore();
   const router = useRouter();
+  const { getAll } = useCountries();
+  const countries = getAll();
 
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
@@ -80,20 +82,19 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // if (files.length === 0) {
-    //   toast.error("Upload at least one image");
-    //   return;
-    // }
-    // const imageUrls: string[] = (await handleImageUpload()) || [];
-    // if (imageUrls.length === 0) {
-    //   toast.error("Failed to upload images. Please try again.");
-    //   return;
-    // }
-    // await handelAddHome(values, imageUrls);
-    // toast.success("Your home is added successfully");
-    // router.push("/");
-    // form.reset();
-    console.log(values);
+    if (files.length === 0) {
+      toast.error("Upload at least one image");
+      return;
+    }
+    const imageUrls: string[] = (await handleImageUpload()) || [];
+    if (imageUrls.length === 0) {
+      toast.error("Failed to upload images. Please try again.");
+      return;
+    }
+    await handelAddHome(values, imageUrls);
+    toast.success("Your home is added successfully");
+    router.push("/");
+    form.reset();
   };
 
   return (
@@ -116,7 +117,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="price"
@@ -136,7 +136,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="country"
@@ -156,7 +155,7 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
                       >
                         {field.value
                           ? countries.find(
-                              (country) => country.value === field.value
+                              (country) => country.label === field.value
                             )?.label
                           : "Select country"}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0" />
@@ -171,13 +170,12 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
                       />
                       <CommandEmpty>No country found.</CommandEmpty>
                       <CommandGroup className="h-[120px] overflow-y-auto">
-                        {countries.map((country: any) => (
+                        {countries.map((country) => (
                           <CommandItem
                             value={country.label}
-                            key={country.value}
+                            key={country.label}
                             onSelect={() => {
-                              form.setValue("country", country.value);
-                              console.log(country.value);
+                              form.setValue("country", country.label);
                               form.clearErrors("country");
                               setOpen(false);
                             }}
@@ -186,7 +184,7 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
                             <CheckIcon
                               className={cn(
                                 "ml-auto h-4 w-4",
-                                country.value === field.value
+                                country.label === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -201,135 +199,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
-          {/* <FormField
-            control={form.control}
-            name="state"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>States</FormLabel>
-                <Popover open={open3} onOpenChange={setOpen3}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? states.find(
-                              (state) => state.name === field.value
-                            )?.name
-                          : "Select states"}
-                        <ChevronDown className="ml-2 h-4 w-4 shrink-0" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[450px] p-0">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search your state"
-                        className="h-9"
-                      />
-                      <CommandEmpty>No state found.</CommandEmpty>
-                      <CommandGroup className="h-[120px] overflow-y-auto">
-                        {states.map((state) => (
-                          <CommandItem
-                            value={state.name}
-                            key={state.name}
-                            onSelect={() => {
-                              form.setValue("state", state.isoCode);
-                              form.clearErrors("state");
-                              setOpen3(false);
-                            }}
-                          >
-                            {state.name}
-                            <CheckIcon
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                state.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-
-          {/* <FormField
-            control={form.control}
-            name="city"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Cities</FormLabel>
-                <Popover open={open4} onOpenChange={setOpen4}>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? cities.find(
-                              (city) => city.name === field.value
-                            )?.name
-                          : "Select city"}
-                        <ChevronDown className="ml-2 h-4 w-4 shrink-0" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[450px] p-0">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search your city"
-                        className="h-9"
-                      />
-                      <CommandEmpty>No city found.</CommandEmpty>
-                      <CommandGroup className="h-[120px] overflow-y-auto">
-                        {cities.map((city) => (
-                          <CommandItem
-                            value={city.name}
-                            key={city.name}
-                            onSelect={() => {
-                              form.setValue("city", city.stateCode);
-                              form.clearErrors("city");
-                              setOpen4(false);
-                            }}
-                          >
-                            {city.name}
-                            <CheckIcon
-                              className={cn(
-                                "ml-auto h-4 w-4",
-                                city.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-
           <FormField
             control={form.control}
             name="category"
@@ -393,7 +262,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="guestCount"
@@ -421,7 +289,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="roomCount"
@@ -449,7 +316,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="bathroomCount"
@@ -477,7 +343,6 @@ const AddHomeForm = ({ countries }: { countries: CountryProps[] }) => {
               </FormItem>
             )}
           />
-
           <div className="space-y-2">
             <Label htmlFor="picture">Picture</Label>
             <Input

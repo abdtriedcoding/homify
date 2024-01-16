@@ -19,7 +19,7 @@ export async function handelAddHome(values: Inputs, imageUrls: string[]) {
       roomCount: result.roomCount,
       bathroomCount: result.bathroomCount,
       guestCount: result.guestCount,
-      location: result.location,
+      location: result.country,
       price: result.price,
       userId: currentUser.id,
     },
