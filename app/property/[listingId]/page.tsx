@@ -3,18 +3,12 @@ import ListingImageSlider from "./_components/listing-image-slider";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { HeartIcon } from "lucide-react";
-import dynamic from "next/dynamic";
-
-const Map = dynamic(() => import("@/app/_components/map"), {
-  ssr: false,
-});
+import ClientSideMap from "./_components/clientside-map";
 
 const Page = async ({ params }: { params: { listingId: string } }) => {
   const { listingId } = params;
   const listing = await getListingById(listingId);
   const currentUser = await getCurrentUser();
-
-  const coordinates = [51.505, -0.09];
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -60,10 +54,7 @@ const Page = async ({ params }: { params: { listingId: string } }) => {
               </p>
             </div>
           </div>
-          {/* Map */}
-          <div className="pr-6">
-            <Map center={coordinates} />
-          </div>
+          <ClientSideMap location={listing?.location!} />
         </div>
         {/* Calendar */}
         <div className="lg:col-span-1">
