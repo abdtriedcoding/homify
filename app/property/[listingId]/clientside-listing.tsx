@@ -110,7 +110,12 @@ const ListingClient = ({
               dateRange={dateRange}
               disabledDates={disabledDates}
             />
-            <ReserveButton />
+            <ReserveButton
+              totalPrice={totalPrice}
+              listingId={listing.id}
+              startDate={dateRange.startDate!}
+              endDate={dateRange.endDate!}
+            />
           </div>
         </div>
       </div>
