@@ -26,7 +26,7 @@ const UserMenu = () => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>My Trips</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/my-trips")}>My Trips</DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push("/favorites")}>
             My Favorites
           </DropdownMenuItem>

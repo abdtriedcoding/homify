@@ -1,6 +1,6 @@
 import prisma from "@/lib/prismadb";
 
-export default async function getReservations(userId: string) {
+export default async function getUserReservations(userId: string) {
   try {
     const reservations = await prisma.reservation.findMany({
       where: { userId },
