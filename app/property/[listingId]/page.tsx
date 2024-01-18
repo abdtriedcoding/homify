@@ -8,6 +8,9 @@ const Page = async ({ params }: { params: { listingId: string } }) => {
   const listing = await getListingById(listingId);
   const reservations = await getReservations(listingId);
 
+  console.log("reservations",reservations)
+  console.log("listingId",listingId)
+
   const currentUser = await getCurrentUser();
   if (!listing) {
     // Handle the null case, for example, redirect to an error page or show a message

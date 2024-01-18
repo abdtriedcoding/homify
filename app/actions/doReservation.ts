@@ -1,6 +1,7 @@
 "use server";
 
 import getCurrentUser from "./getCurrentUser";
+import prisma from "@/lib/prismadb";
 
 interface DoReservationProps {
   totalPrice: number;
@@ -18,5 +19,19 @@ export async function doReservation({
   const currentUser = await getCurrentUser();
   if (!currentUser) return;
 
-  console.log("Data:", listingId, startDate, endDate, totalPrice);
+  await prisma.listing.update({
+    where: {
+      id: listingId,
+    },
+    data: {
+      reservations: {
+        create: {
+          userId: currentUser.id,
+          startDate,
+          endDate,
+          totalPrice,
+        },
+      },
+    },
+  });
 }
