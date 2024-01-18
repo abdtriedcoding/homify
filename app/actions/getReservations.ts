@@ -1,12 +1,12 @@
 import prisma from "@/lib/prismadb";
 
-export default async function getReservations(id: string) {
+export default async function getReservations(listingId: string) {
   try {
     const reservations = await prisma.reservation.findMany({
-      where: { id },
+      where: { listingId: listingId },
     });
 
-    if (!reservations) {
+    if (!reservations || reservations.length === 0) {
       return [];
     }
 
@@ -19,6 +19,7 @@ export default async function getReservations(id: string) {
 
     return safeReservations;
   } catch (error: any) {
+    console.error("Error fetching reservations:", error);
     return [];
   }
 }
