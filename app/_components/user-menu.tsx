@@ -30,7 +30,7 @@ const UserMenu = () => {
           <DropdownMenuItem onClick={() => router.push("/favorites")}>
             My Favorites
           </DropdownMenuItem>
-          <DropdownMenuItem>My Reservations</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push("/my-reservations")}>My Reservations</DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push("/properties")}>
             My Properties
           </DropdownMenuItem>
