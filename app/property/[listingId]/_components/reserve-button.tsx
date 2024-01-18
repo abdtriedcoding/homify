@@ -2,6 +2,7 @@
 
 import { doReservation } from "@/app/actions/doReservation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface ReserveButtonProps {
@@ -23,11 +24,14 @@ const ReserveButton: React.FC<ReserveButtonProps> = ({
     startDate,
     endDate,
   };
+
+  const router = useRouter();
   return (
     <>
       <Button
         onClick={async () => {
           await doReservation(data);
+          router.refresh();
           toast.success("Reversation confirmed successfully");
         }}
         className="w-full"
