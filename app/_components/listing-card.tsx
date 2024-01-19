@@ -3,10 +3,12 @@
 import Link from "next/link";
 import ImageSlider from "./image-slider";
 import { SafeListing, SafeReservation } from "@/types";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { cancelReservation } from "../actions/cancelReservation";
 
 interface ListingCardProps {
   data: SafeListing;
@@ -15,6 +17,7 @@ interface ListingCardProps {
 
 const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const reservationDate = useMemo(() => {
     if (!reservation) {
       return null;
@@ -25,6 +28,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
 
     return `${format(start, "PP")} - ${format(end, "PP")}`;
   }, [reservation]);
+
+  const handelCancelReservation = async () => {
+    await cancelReservation(reservation?.id!);
+    router.refresh();
+    toast.success("Deleted successfully");
+  };
 
   return (
     <Link href={`/property/${data?.id}`}>
@@ -59,7 +68,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
               <div className="font-semibold">${reservation?.totalPrice}</div>
             </div>
 
-            <Button className="w-full mt-2">Cancel Reservation</Button>
+            <Button onClick={handelCancelReservation} className="w-full mt-2">
+              Cancel Reservation
+            </Button>
           </>
         )}
       </div>
