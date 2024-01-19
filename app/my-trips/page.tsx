@@ -8,8 +8,12 @@ export default async function Page() {
   return (
     <>
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        {listings?.map((data, index) => (
-          <ListingCard key={index} {...data.listing} />
+        {listings?.map((reservation) => (
+          <ListingCard
+            key={reservation.id}
+            data={reservation.listing}
+            reservation={reservation}
+          />
         ))}
       </div>
     </>

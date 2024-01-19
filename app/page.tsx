@@ -7,7 +7,7 @@ export default async function Home() {
     <>
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {listings?.map((data, index) => (
-          <ListingCard key={index} {...data} />
+          <ListingCard key={index} data={data} />
         ))}
       </div>
     </>

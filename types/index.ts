@@ -32,7 +32,7 @@ export type SafeUser = Omit<
 export interface ListingClientProps {
   listing: SafeListing;
   currentUser?: SafeUser | null;
-  reservations:SafeReservation[]
+  reservations: SafeReservation[];
 }
 
 export type SafeReservation = Omit<
@@ -42,4 +42,5 @@ export type SafeReservation = Omit<
   createdAt: string;
   startDate: string;
   endDate: string;
+  listing: SafeListing;
 };
