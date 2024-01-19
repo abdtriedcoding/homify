@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { cancelReservation } from "../actions/cancelReservation";
+import { removeListing } from "../actions/removeListing";
 
 interface ListingCardProps {
   data: SafeListing;
@@ -33,6 +34,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
     await cancelReservation(reservation?.id!);
     router.refresh();
     toast.success("Deleted successfully");
+  };
+
+  const handelRemoveListing = async () => {
+    await removeListing(reservation?.id!);
+    router.refresh();
+    toast.success("Home removed successfully");
   };
 
   return (
@@ -70,6 +77,14 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
 
             <Button onClick={handelCancelReservation} className="w-full mt-2">
               Cancel Reservation
+            </Button>
+          </>
+        )}
+
+        {pathname === "/properties" && (
+          <>
+            <Button onClick={handelRemoveListing} className="w-full mt-2">
+              Remove Home
             </Button>
           </>
         )}
