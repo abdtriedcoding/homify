@@ -40,7 +40,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
       <div className="cursor-pointer">
         <ImageSlider urls={data?.imageUrls} />
 
-        {pathname !== "/my-trips" && (
+        {pathname !== "/my-trips" && pathname !== "/my-reservations" && (
           <div className="mt-4 space-y-1">
             <h3 className="font-medium truncate">{data?.title}</h3>
             <p className="text-sm font-medium truncate text-gray-500">
@@ -57,7 +57,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ data, reservation }) => {
           </div>
         )}
 
-        {pathname === "/my-trips" && (
+        {(pathname === "/my-trips" || pathname === "/my-reservations") && (
           <>
             <div className="font-semibold text-lg">{data.location}</div>
             <div className="font-light text-neutral-500">
